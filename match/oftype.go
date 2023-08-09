@@ -2,13 +2,13 @@ package match
 
 import (
 	"reflect"
-
-	"github.com/golang/mock/gomock"
 )
 
-type ofType struct{ t string }
+type ofType struct {
+	t string
+}
 
-func OfType(t string) gomock.Matcher {
+func NewOfType(t string) *ofType {
 	return &ofType{t}
 }
 

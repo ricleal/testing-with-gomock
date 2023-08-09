@@ -2,13 +2,13 @@ package user_test
 
 import (
 	"errors"
-	"fmt"
 	"testing"
 
+	"testing-with-gomock/match"
+	"testing-with-gomock/mocks"
+	"testing-with-gomock/user"
+
 	"github.com/golang/mock/gomock"
-	"github.com/sgreben/testing-with-gomock/match"
-	"github.com/sgreben/testing-with-gomock/mocks"
-	"github.com/sgreben/testing-with-gomock/user"
 )
 
 func TestUse(t *testing.T) {
@@ -28,7 +28,7 @@ func TestUseReturnsErrorFromDo(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
-	dummyError := errors.New("dummy error")
+	dummyError := errors.New("any dummy error")
 	mockDoer := mocks.NewMockDoer(mockCtrl)
 	testUser := &user.User{Doer: mockDoer}
 
@@ -62,7 +62,7 @@ func TestUseMatchersExample2(t *testing.T) {
 	testUser := &user.User{Doer: mockDoer}
 
 	mockDoer.EXPECT().
-		DoSomething(123, match.OfType("string")).
+		DoSomething(123, match.NewOfType("string")).
 		Return(nil).
 		Times(1)
 
@@ -113,7 +113,7 @@ func TestUseActionExamples(t *testing.T) {
 		DoSomething(gomock.Any(), gomock.Any()).
 		Return(nil).
 		Do(func(x int, y string) {
-			fmt.Println("Called with x =", x, "and y =", y)
+			t.Log("Called with x =", x, "and y =", y)
 		})
 
 	mockDoer.EXPECT().
